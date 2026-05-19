@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produkter – Brann Ultras Stickers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">🔴 BRANN ULTRAS</a>
+    <div class="nav-links">
+      <a href="index.html">Hjem</a>
+      <a href="produkter.html" class="active">Produkter</a>
+      <a href="index.html#kontakt">Kontakt</a>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <h1>Alle <span class="red">Stickers</span></h1>
+    <p>Velg ditt favorittdesign – trykk, vinyl, Bergen.</p>
+  </section>
+
+  <section class="products-page">
+    <div class="filter-bar">
+      <button class="filter-btn active" data-cat="alle">Alle</button>
+      <button class="filter-btn" data-cat="klassisk">Klassisk</button>
+      <button class="filter-btn" data-cat="ultras">Ultras</button>
+      <button class="filter-btn" data-cat="kamp">Kamp</button>
+    </div>
+    <div class="product-grid" id="product-grid"></div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">🔴 BRANN ULTRAS STICKERS</div>
+    <p>Bergen, Norge · <a href="mailto:hei@brannultras.no">hei@brannultras.no</a></p>
+    <p class="footer-small">Ingen offisiell tilknytning til SK Brann FK</p>
+  </footer>
+
+  <script src="products.js"></script>
+  <script>
+    let activeFilter = 'alle';
+    const grid = document.getElementById('product-grid');
+
+    function render() {
+      const filtered = activeFilter === 'alle'
+        ? PRODUCTS
+        : PRODUCTS.filter(p => p.cat === activeFilter);
+
+      grid.innerHTML = filtered.map(p => `
+        <a href="produkt.html?id=${p.id}" class="product-card">
+          <div class="product-card-img">${p.emoji}</div>
+          <div class="product-card-body">
+            <div class="product-card-name">${p.name}</div>
+            <div class="product-card-sub">${p.tagline}</div>
+            <div class="product-card-price">Fra ${p.prices[50]} kr</div>
+          </div>
+        </a>`).join('');
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.cat;
+        render();
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>

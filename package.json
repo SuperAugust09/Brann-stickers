@@ -1,0 +1,8 @@
+{
+  "name": "brann-ultras-stickers",
+  "version": "1.0.0",
+  "description": "SK Brann Ultras Stickers nettbutikk",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}

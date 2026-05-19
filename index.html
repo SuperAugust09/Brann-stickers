@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brann Ultras Stickers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">🔴 BRANN ULTRAS</a>
+    <div class="nav-links">
+      <a href="index.html">Hjem</a>
+      <a href="produkter.html">Produkter</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-text">BRANN</div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Bergen · Established 1908</p>
+      <h1 class="hero-title">ULTRAS<br><span class="red">STICKERS</span></h1>
+      <p class="hero-sub">Vis din lojalitet. Offisielle SK Brann-inspirerte stickers for ekte supportere – på dine premisser.</p>
+      <a href="produkter.html" class="btn-primary">Se alle produkter →</a>
+    </div>
+    <div class="hero-visual">
+      <div class="sticker-float s1">🛡️</div>
+      <div class="sticker-float s2">🔴</div>
+      <div class="sticker-float s3">✊</div>
+      <div class="sticker-float s4">⚽</div>
+    </div>
+  </section>
+
+  <!-- ABOUT STRIP -->
+  <section class="strip">
+    <div class="strip-item"><span class="strip-num">50+</span><span class="strip-label">Designs</span></div>
+    <div class="strip-divider"></div>
+    <div class="strip-item"><span class="strip-num">Bergen</span><span class="strip-label">Laget her</span></div>
+    <div class="strip-divider"></div>
+    <div class="strip-item"><span class="strip-num">100%</span><span class="strip-label">Ultras godkjent</span></div>
+    <div class="strip-divider"></div>
+    <div class="strip-item"><span class="strip-num">Fast</span><span class="strip-label">Levering</span></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="about-text">
+      <p class="section-eyebrow">Om oss</p>
+      <h2>Skapt av supportere,<br>for supportere</h2>
+      <p>Vi er en liten gjeng fra Bergen som elsker SK Brann og tribunekulturen. Hvert design er laget med hjertet – for deg som lever for rød-hvitt, for Stadion, for kampen.</p>
+      <p>Stickersene trykkes på høykvalitets vinyl som tåler regn, sol og det bergenske veeret. Velg mellom pakker på 50, 100 eller 200 stickers.</p>
+      <a href="produkter.html" class="btn-secondary">Se produktene →</a>
+    </div>
+    <div class="about-visual">
+      <div class="about-card">
+        <div class="about-icon">🎨</div>
+        <h3>Unike designs</h3>
+        <p>Hvert motiv er tegnet fra bunnen av – ingen generiske clipart-logoer.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">💪</div>
+        <h3>Slitesterk vinyl</h3>
+        <p>UV-bestandig og vanntett. Tåler alt fra Lerkendal til Brann Stadion.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">📦</div>
+        <h3>Bulk-priser</h3>
+        <p>Jo mer du bestiller, jo bedre pris. Perfekt for tifo og supporter-aksjoner.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="featured">
+    <p class="section-eyebrow">Populære stickers</p>
+    <h2>Bestselgere</h2>
+    <div class="product-grid" id="featured-grid"></div>
+    <div style="text-align:center;margin-top:2.5rem;">
+      <a href="produkter.html" class="btn-primary">Se alle produkter →</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="kontakt">
+    <div class="contact-inner">
+      <p class="section-eyebrow">Spørsmål?</p>
+      <h2>Ta kontakt</h2>
+      <p>Vil du ha et custom design, stor bulk-bestilling eller har du andre spørsmål?</p>
+      <a href="mailto:hei@brannultras.no" class="btn-primary">Send oss en mail →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">🔴 BRANN ULTRAS STICKERS</div>
+    <p>Bergen, Norge · <a href="mailto:hei@brannultras.no">hei@brannultras.no</a></p>
+    <p class="footer-small">Ingen offisiell tilknytning til SK Brann FK</p>
+  </footer>
+
+  <script src="products.js"></script>
+  <script>
+    const grid = document.getElementById('featured-grid');
+    PRODUCTS.slice(0,3).forEach(p => {
+      grid.innerHTML += `
+        <a href="produkt.html?id=${p.id}" class="product-card">
+          <div class="product-card-img">${p.emoji}</div>
+          <div class="product-card-body">
+            <div class="product-card-name">${p.name}</div>
+            <div class="product-card-sub">${p.tagline}</div>
+            <div class="product-card-price">Fra ${p.prices[50]} kr</div>
+          </div>
+        </a>`;
+    });
+  </script>
+</body>
+</html>

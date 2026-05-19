@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produkt – Brann Ultras Stickers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">🔴 BRANN ULTRAS</a>
+    <div class="nav-links">
+      <a href="index.html">Hjem</a>
+      <a href="produkter.html">Produkter</a>
+      <a href="index.html#kontakt">Kontakt</a>
+    </div>
+  </nav>
+
+  <section class="product-detail">
+    <a href="produkter.html" class="back-link">← Tilbake til produkter</a>
+
+    <div class="product-detail-grid">
+      <!-- LEFT: image -->
+      <div class="product-detail-img-wrap">
+        <div class="product-detail-img" id="detail-img">🛡️</div>
+        <div class="product-detail-badge">Slitesterk vinyl · Vanntett · UV-bestandig</div>
+      </div>
+
+      <!-- RIGHT: info -->
+      <div class="product-detail-info">
+        <p class="product-cat" id="detail-cat">Klassisk</p>
+        <h1 id="detail-name">Produkt</h1>
+        <p class="product-desc" id="detail-desc">Laster...</p>
+
+        <!-- Quantity selector -->
+        <div class="qty-section">
+          <p class="qty-label">Velg antall:</p>
+          <div class="qty-options" id="qty-options">
+            <button class="qty-btn active" data-qty="50">50 stk</button>
+            <button class="qty-btn" data-qty="100">100 stk</button>
+            <button class="qty-btn" data-qty="200">200 stk</button>
+            <button class="qty-btn" data-qty="mer">Mer?</button>
+          </div>
+          <div class="qty-price-row">
+            <span class="qty-price" id="qty-price">— kr</span>
+            <span class="qty-per-unit" id="qty-per-unit"></span>
+          </div>
+          <div class="qty-contact-msg" id="qty-contact-msg" style="display:none">
+            <p>For bestillinger over 200 stk tilbyr vi egne bulk-priser. Ta kontakt så finner vi noe som passer!</p>
+            <a href="mailto:hei@brannultras.no" class="btn-secondary">Send oss en mail →</a>
+          </div>
+        </div>
+
+        <!-- Checkout button -->
+        <button class="btn-primary btn-checkout" id="checkout-btn" onclick="startCheckout()">
+          Kjøp nå – Betal med kort →
+        </button>
+        <p class="secure-note">🔒 Sikker betaling via Stripe</p>
+
+        <!-- Details -->
+        <div class="product-specs">
+          <div class="spec-row"><span>Material</span><span>Høykvalitets vinyl</span></div>
+          <div class="spec-row"><span>Finish</span><span>Matt eller blank (du velger)</span></div>
+          <div class="spec-row"><span>Størrelse</span><span>Ca. 8 × 8 cm</span></div>
+          <div class="spec-row"><span>Levering</span><span>3–7 virkedager</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">🔴 BRANN ULTRAS STICKERS</div>
+    <p>Bergen, Norge · <a href="mailto:hei@brannultras.no">hei@brannultras.no</a></p>
+    <p class="footer-small">Ingen offisiell tilknytning til SK Brann FK</p>
+  </footer>
+
+  <script src="products.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const product = PRODUCTS.find(p => p.id === id) || PRODUCTS[0];
+
+    document.getElementById('detail-img').textContent = product.emoji;
+    document.getElementById('detail-name').textContent = product.name;
+    document.getElementById('detail-desc').textContent = product.description;
+    document.getElementById('detail-cat').textContent = product.cat.charAt(0).toUpperCase() + product.cat.slice(1);
+    document.title = product.name + ' – Brann Ultras Stickers';
+
+    let selectedQty = 50;
+
+    function updatePrice() {
+      const priceEl = document.getElementById('qty-price');
+      const perUnitEl = document.getElementById('qty-per-unit');
+      const contactMsg = document.getElementById('qty-contact-msg');
+      const checkoutBtn = document.getElementById('checkout-btn');
+
+      if (selectedQty === 'mer') {
+        priceEl.textContent = 'Kontakt oss';
+        perUnitEl.textContent = '';
+        contactMsg.style.display = 'block';
+        checkoutBtn.style.display = 'none';
+      } else {
+        const price = product.prices[selectedQty];
+        const perUnit = (price / selectedQty).toFixed(1);
+        priceEl.textContent = price + ' kr';
+        perUnitEl.textContent = perUnit + ' kr per sticker';
+        contactMsg.style.display = 'none';
+        checkoutBtn.style.display = 'block';
+      }
+    }
+
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedQty = btn.dataset.qty === 'mer' ? 'mer' : parseInt(btn.dataset.qty);
+        updatePrice();
+      });
+    });
+
+    updatePrice();
+
+    async function startCheckout() {
+      const btn = document.getElementById('checkout-btn');
+      btn.textContent = 'Sender deg til betaling...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/.netlify/functions/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productId: product.id,
+            productName: product.name,
+            quantity: selectedQty,
+            price: product.prices[selectedQty],
+          })
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Noe gikk galt. Prøv igjen.');
+          btn.textContent = 'Kjøp nå – Betal med kort →';
+          btn.disabled = false;
+        }
+      } catch (e) {
+        alert('Kunne ikke koble til betalingsløsningen. Sjekk at siden er live på Netlify.');
+        btn.textContent = 'Kjøp nå – Betal med kort →';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
